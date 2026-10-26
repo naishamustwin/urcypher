@@ -143,6 +143,9 @@ select { appearance: none; -webkit-appearance: none; background-image: linear-gr
 .done:focus { outline: none; }
 .done__title { margin: 0; font-weight: 900; font-stretch: 115%; text-transform: uppercase; font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 0.92; letter-spacing: -0.01em; }
 .done__text { margin: 0; max-width: 39rem; font-size: 1.25rem; }
+.done__follow { margin: 0; font-family: var(--f-mono); font-size: 0.95rem; letter-spacing: 0.04em; }
+.done__follow a, .foot__meta a { color: var(--paper); text-underline-offset: 3px; }
+.done__follow a:hover, .foot__meta a:hover { text-decoration-thickness: 2px; }
 
 .help { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; border: 2px dashed var(--ink); padding: 20px 24px; }
 .help p { margin: 0; }
@@ -160,7 +163,7 @@ select { appearance: none; -webkit-appearance: none; background-image: linear-gr
 [hidden] { display: none !important; }
 
 /* Small phones: the hero's own button does the job of the header RSVP link */
-@media (max-width: 32.5em) { .bar > .btn { display: none; } }
+@media (max-width: 32.5em) { .bar > .btn { display: none; } .foot__meta { text-align: left; } }
 
 /* Phones: keep the CTA on one line, full width */
 @media (max-width: 32.5em) {
