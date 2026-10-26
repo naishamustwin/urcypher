@@ -1,0 +1,3 @@
+Archivo, Newsreader and IBM Plex Mono are licensed under the SIL Open Font License 1.1.
+https://openfontlicense.org
+Files from the Fontsource project (https://fontsource.org).

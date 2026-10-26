@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>URCypher | Broward's Biggest Cypher</title>
+<meta name="description" content="Broward's biggest cypher, an Urban Relations production. Rappers, singers, dancehall, reggae, pop and bouyon artists: apply for a spot in the circle. Invite only.">
+<link rel="canonical" href="https://urcypher.com/">
+<meta name="theme-color" content="#2B4BF2">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="URCypher">
+<meta property="og:title" content="URCypher | Broward's Biggest Cypher">
+<meta property="og:description" content="Invite only. Apply for a spot in the circle. Date and location go to confirmed artists only.">
+<meta property="og:url" content="https://urcypher.com/">
+<meta property="og:image" content="https://urcypher.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/styles.css">
+<script src="/assets/app.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#rsvp">Skip to the RSVP form</a>
+
+<header class="hero">
+  <div class="wrap bar">
+    <div class="bar__brand">
+      <span class="mark mark--sm">UR<span class="dot dot--ink" aria-hidden="true"></span>Cypher</span>
+    </div>
+    <a class="btn btn--ink btn--sm" href="#rsvp">RSVP</a>
+  </div>
+
+  <div class="wrap hero__body">
+    <p class="mono">Invite only / Broward County</p>
+    <h1 class="hero__title">Broward's<br>biggest<br>cypher<span class="dot dot--ink" aria-hidden="true"></span></h1>
+    <div class="hero__row">
+      <p class="hero__lede">Rappers, singers, dancehall, reggae, pop and bouyon artists. Apply for a spot in the circle. The date and location go out privately, only to artists our team has confirmed.</p>
+      <a class="cta" href="#rsvp"><span class="cta__label">Request your spot</span><span class="cta__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M12 3v17M5 13l7 7 7-7"/></svg></span></a>
+    </div>
+    <div class="meter" aria-hidden="true">
+      <div class="meter__bars">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="meter__legend mono"><span>Bring your best 16</span><span>Bar 16</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap steps" aria-labelledby="steps-h">
+    <h2 id="steps-h" class="h2">How you get in</h2>
+    <ol class="steps__list">
+      <li>
+        <span class="mono steps__num">Step 1</span>
+        <span class="steps__title">Submit the form</span>
+        <span class="steps__text">Tell us who you are and send links to your music so we can hear you.</span>
+      </li>
+      <li>
+        <span class="mono steps__num">Step 2</span>
+        <span class="steps__title">The team listens</span>
+        <span class="steps__text">A URCypher team member reviews every submission and reaches out to confirm your RSVP.</span>
+      </li>
+      <li>
+        <span class="mono steps__num">Step 3</span>
+        <span class="steps__title">Get the details</span>
+        <span class="steps__text">Once you're confirmed, the date and location come straight to you. Nobody else gets them.</span>
+      </li>
+    </ol>
+  </section>
+
+  <section id="rsvp" class="wrap rsvp" aria-labelledby="rsvp-h">
+    <div class="rsvp__head">
+      <h2 id="rsvp-h" class="h2">Artist RSVP</h2>
+      <p class="mono">All fields required unless marked optional</p>
+    </div>
+
+    <form id="rsvp-form" class="form" novalidate>
+      <div class="form__summary" id="form-summary" role="alert" hidden></div>
+
+      <div class="row">
+        <div class="field">
+          <label for="f-first">First name</label>
+          <input id="f-first" name="firstName" type="text" autocomplete="given-name" maxlength="60" required aria-describedby="e-first">
+          <p class="err" id="e-first" hidden></p>
+        </div>
+        <div class="field">
+          <label for="f-last">Last name</label>
+          <input id="f-last" name="lastName" type="text" autocomplete="family-name" maxlength="60" required aria-describedby="e-last">
+          <p class="err" id="e-last" hidden></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="f-stage">Stage name</label>
+          <input id="f-stage" name="stageName" type="text" autocomplete="off" maxlength="80" required placeholder="The name on the flyer" aria-describedby="e-stage">
+          <p class="err" id="e-stage" hidden></p>
+        </div>
+        <div class="field">
+          <label for="f-ig">Instagram handle</label>
+          <div class="prefix">
+            <span aria-hidden="true">@</span>
+            <input id="f-ig" name="instagram" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="31" required placeholder="yourhandle" aria-describedby="e-ig">
+          </div>
+          <p class="err" id="e-ig" hidden></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="f-genre">Genre</label>
+          <select id="f-genre" name="genre" required aria-describedby="e-genre">
+            <option value="">Choose your lane</option>
+            <option>Hip-hop / Rap</option>
+            <option>R&amp;B / Singer</option>
+            <option>Dancehall</option>
+            <option>Reggae</option>
+            <option>Pop</option>
+            <option>Bouyon</option>
+            <option>Other</option>
+          </select>
+          <p class="err" id="e-genre" hidden></p>
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone</label>
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="25" required placeholder="(954) 555-0123" aria-describedby="e-phone">
+          <p class="err" id="e-phone" hidden></p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com" aria-describedby="h-email e-email">
+        <p class="hint" id="h-email">Your confirmation, date and location go here.</p>
+        <p class="err" id="e-email" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="f-yt">YouTube links</label>
+        <textarea id="f-yt" name="youtube" rows="3" maxlength="1500" required spellcheck="false" placeholder="https://youtube.com/watch?v=..." aria-describedby="h-yt e-yt"></textarea>
+        <p class="hint" id="h-yt">One link per line, up to 5. Live performances help us most.</p>
+        <p class="err" id="e-yt" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="f-profile">Artist profile link</label>
+        <input id="f-profile" name="profile" type="url" inputmode="url" autocomplete="off" maxlength="300" required placeholder="Spotify, Apple Music, Tidal or similar" aria-describedby="e-profile">
+        <p class="err" id="e-profile" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="f-web">Website URL <span class="opt">Optional</span></label>
+        <input id="f-web" name="website" type="url" inputmode="url" autocomplete="url" maxlength="300" placeholder="https://" aria-describedby="e-web">
+        <p class="err" id="e-web" hidden></p>
+      </div>
+
+      <!-- Spam trap. People never see it. Named so browsers and password managers leave it alone. -->
+      <div class="trap" aria-hidden="true">
+        <label for="f-trap">Leave this field empty</label>
+        <input id="f-trap" name="trap_zq" type="text" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other">
+      </div>
+
+      <div class="form__foot">
+        <button class="cta cta--blue" type="submit" id="f-submit"><span class="cta__label" id="f-submit-label">Send my RSVP</span><span class="cta__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M3 12h17M13 5l7 7-7 7"/></svg></span></button>
+        <p class="form__note">Sending this does not confirm your spot. A team member will reach out first.</p>
+      </div>
+    </form>
+
+    <div class="done" id="done" role="status" tabindex="-1" hidden>
+      <p class="mono">Submission received</p>
+      <p class="done__title">You're in the queue.</p>
+      <p class="done__text" id="done-text">A URCypher team member will review your music and reach out to confirm. Once you're confirmed, we'll send the date and location to the email you gave us.</p>
+    </div>
+
+    <div class="help">
+      <p>Having trouble with the form? Send your submission or questions to</p>
+      <p class="help__email"><span id="team-email">URCypherTeam@gmail.com</span> <button type="button" class="copy" data-copy="URCypherTeam@gmail.com">Copy</button></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__row">
+    <span class="mark mark--foot">UR<span class="dot dot--blue" aria-hidden="true"></span><br>Cypher</span>
+    <p class="mono foot__meta">An Urban Relations production<br>Invite only / Broward County</p>
+  </div>
+</footer>
+
+<noscript><p class="nojs">This form needs JavaScript. You can send your submission to URCypherTeam@gmail.com instead.</p></noscript>
+</body>
+</html>
