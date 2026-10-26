@@ -29,7 +29,7 @@ const GENRES = new Set(["Hip-hop / Rap", "R&B / Singer", "Dancehall", "Reggae", 
 const HEARD = new Set(["Instagram or Facebook ad", "Instagram post or story", "TikTok", "Friend or another artist",
   "WhatsApp or text", "Flyer", "At an event", "Other"]);
 const LOCATIONS = new Set(["Broward", "Miami", "West Palm Beach", "Other"]);
-const SCRIPT_VERSION = 4; // bump together with SCRIPT_VERSION in apps-script/Code.gs
+const SCRIPT_VERSION = 5; // bump together with SCRIPT_VERSION in apps-script/Code.gs
 const MIN_FILL_MS = 4000;
 const BUILT_IN_ORIGINS = ["https://urcypher.com", "https://www.urcypher.com"];
 
