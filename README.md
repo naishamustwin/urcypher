@@ -67,6 +67,21 @@ The form shows "You're in the queue" **only** after the Sheet confirms it wrote 
 2. Send a real RSVP with your own details. Check the RSVPs tab for the row.
 3. Send it again with the same email. You'll get a second row marked **Repeat**.
 
+## Counting ad RSVPs
+
+The form asks **How did you hear about URCypher?** (required) and saves the answer in the **Heard About** column.
+It also reads the tracking tags on the link the artist arrived from and saves them in **Ad Tracking**, so ad traffic is counted even when someone picks the wrong answer.
+
+Use this link in every ad (change the campaign name per ad if you want to compare them):
+
+```
+https://urcypher.com/?utm_source=instagram&utm_medium=paid&utm_campaign=urcypher_launch
+```
+
+Meta also adds its own click ID to ad links, which shows up as "meta click". In the Sheet, filter **Ad Tracking** for `medium=paid` or **Heard About** for "Instagram or Facebook ad".
+
+**After changing Code.gs** (as in this update): paste the new Code.gs, Save, then Deploy > Manage deployments > pencil > Version: **New version** > Deploy. The two new columns appear on their own; existing rows stay put. Until you redeploy, RSVPs still save, just without the new columns, and the setup check at /api/rsvp says the script is out of date.
+
 ## Working the Sheet
 
 - **Status** is a dropdown: New, Review, Confirmed, Waitlist, Declined, Details sent. Change it as the team works through RSVPs.

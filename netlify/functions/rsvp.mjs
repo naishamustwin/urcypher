@@ -21,6 +21,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const IG_RE = /^[A-Za-z0-9._]{1,30}$/;
 const YT_RE = /^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\/\S+$/i;
 const GENRES = new Set(["Hip-hop / Rap", "R&B / Singer", "Dancehall", "Reggae", "Pop", "Bouyon", "Other"]);
+const HEARD = new Set(["Instagram or Facebook ad", "Instagram post or story", "TikTok", "Friend or another artist",
+  "WhatsApp or text", "Flyer", "At an event", "Other"]);
+const SCRIPT_VERSION = 2; // bump together with SCRIPT_VERSION in apps-script/Code.gs
 const MIN_FILL_MS = 4000;
 const BUILT_IN_ORIGINS = ["https://urcypher.com", "https://www.urcypher.com"];
 
@@ -88,7 +91,8 @@ async function setupCheck() {
     scriptUrlLooksRight: /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(process.env.APPS_SCRIPT_URL || ""),
     scriptReachable: false,
     secretMatches: false,
-    sheetReady: false
+    sheetReady: false,
+    scriptUpToDate: false
   };
   let fix = null;
   if (!checks.settings) fix = "Add APPS_SCRIPT_URL and RSVP_SECRET in Netlify, then trigger a new deploy.";
@@ -104,7 +108,9 @@ async function setupCheck() {
         else if (r.data.ok) {
           checks.secretMatches = true;
           checks.sheetReady = !!r.data.sheetReady;
+          checks.scriptUpToDate = Number(r.data.version || 1) >= SCRIPT_VERSION;
           if (!checks.sheetReady) fix = "Run the setup function once in Apps Script to create the RSVPs tab.";
+          else if (!checks.scriptUpToDate) fix = "Apps Script is running an older version. Paste the latest Code.gs, Save, then Deploy > Manage deployments > pencil > Version: New version > Deploy. RSVPs still save meanwhile, just without the newest columns.";
         } else fix = "Apps Script answered with: " + r.data.error;
       }
     } catch (err) {
@@ -169,6 +175,9 @@ export default async (req) => {
   if (youtube.some((l) => l === null || !YT_RE.test(l))) return bad("youtube", "Each link should be a YouTube link, one per line.");
   if (!profile) return bad("profile", "Add a link to your artist profile.");
   if (website === null) return bad("website", "Check this link, or leave it empty.");
+  const heardFrom = clean(body.heardFrom, 40);
+  if (!HEARD.has(heardFrom)) return bad("heardFrom", "Tell us how you heard about URCypher.");
+  const tracking = clean(body.tracking, 200);
 
   // Spam signals are recorded, not used to throw RSVPs away.
   const flags = [];
@@ -180,7 +189,7 @@ export default async (req) => {
     action: "rsvp",
     secret: RSVP_SECRET,
     firstName, lastName, stageName, instagram, genre, phone, email,
-    youtube, profile, website: website || "",
+    youtube, profile, website: website || "", heardFrom, tracking,
     review: flags.join(", "),
     source: (() => { try { return new URL(req.url).host; } catch { return "urcypher.com"; } })()
   };

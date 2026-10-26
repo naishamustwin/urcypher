@@ -29,8 +29,25 @@
     email: { el: "f-email", err: "e-email" },
     youtube: { el: "f-yt", err: "e-yt" },
     profile: { el: "f-profile", err: "e-profile" },
-    website: { el: "f-web", err: "e-web" }
+    website: { el: "f-web", err: "e-web" },
+    heardFrom: { el: "f-heard", err: "e-heard" }
   };
+
+  // Ad tracking: read utm_* tags (and Meta's fbclid) from the link the visitor arrived on.
+  // Kept for this browser tab so a reload doesn't lose it.
+  var TRACK_KEY = "urcypher-tracking";
+  var tracking = "";
+  try {
+    var q = new URLSearchParams(location.search), parts = [];
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(function (k) {
+      var v = (q.get(k) || "").trim().slice(0, 60);
+      if (v) parts.push(k.replace("utm_", "") + "=" + v);
+    });
+    if (q.get("fbclid")) parts.push("meta click");
+    if (q.get("ttclid")) parts.push("tiktok click");
+    if (parts.length) { tracking = parts.join(" / "); sessionStorage.setItem(TRACK_KEY, tracking); }
+    else tracking = sessionStorage.getItem(TRACK_KEY) || "";
+  } catch (e) {}
   Object.keys(fields).forEach(function (k) {
     fields[k].input = document.getElementById(fields[k].el);
     fields[k].errEl = document.getElementById(fields[k].err);
@@ -79,6 +96,7 @@
     else if (normUrl(p) === null) e.profile = "Check this link. It should look like https://open.spotify.com/artist/...";
     var w = val("website");
     if (w && normUrl(w) === null) e.website = "Check this link, or leave it empty.";
+    if (!val("heardFrom")) e.heardFrom = "Tell us how you heard about URCypher.";
     return { errors: e, ig: ig, yt: yt };
   }
 
@@ -171,6 +189,8 @@
       youtube: r.yt,
       profile: normUrl(val("profile")),
       website: val("website") ? normUrl(val("website")) : "",
+      heardFrom: val("heardFrom"),
+      tracking: tracking,
       trap: document.getElementById("f-trap").value,
       elapsedMs: Date.now() - startedAt
     };
