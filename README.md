@@ -1,6 +1,6 @@
 # URCypher.com
 
-The RSVP site for URCypher, Broward's Biggest Cypher, an Urban Relations production. One page; every RSVP lands in a Google Sheet.
+The RSVP site for URCypher, South Florida's Biggest Cypher, an Urban Relations production. One page; every RSVP lands in a Google Sheet.
 
 ```
 public/                     The website
