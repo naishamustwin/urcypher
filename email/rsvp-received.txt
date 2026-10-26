@@ -1,0 +1,31 @@
+Subject: We got your RSVP, {{first_name}}
+Preheader: Your music is in the queue. A URCypher team member will be listening.
+
+URCYPHER / INVITE ONLY
+
+You're in the queue.
+
+Hi {{first_name}},
+
+We got your RSVP for URCypher, South Florida's biggest cypher. Thanks for putting your name in.
+
+A member of the URCypher team will be listening to the music you sent us. This is invite only, so the date and location go out privately to confirmed artists.
+
+NOW: The team listens
+We go through every submission and the links you sent.
+
+NEXT: We reach out
+If you're confirmed, you'll hear from us at this email address.
+
+THEN: You get the details
+Date and location, sent only to you. Keep an eye on your inbox and your spam folder.
+
+While you wait, follow us on Instagram for URCypher updates and behind-the-scenes:
+https://www.instagram.com/urban_relations/
+
+--
+An Urban Relations production
+Invite only / South Florida
+
+Questions? Reply to this email or write to URCypherTeam@gmail.com.
+You're getting this because you sent an RSVP at urcypher.com.
