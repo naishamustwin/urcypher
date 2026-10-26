@@ -133,6 +133,25 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="field">
+          <label for="f-loc">Location</label>
+          <select id="f-loc" name="location" required aria-describedby="e-loc">
+            <option value="">Where are you based?</option>
+            <option>Broward</option>
+            <option>Miami</option>
+            <option>West Palm Beach</option>
+            <option>Other</option>
+          </select>
+          <p class="err" id="e-loc" hidden></p>
+        </div>
+        <div class="field" id="loc-other-wrap" hidden>
+          <label for="f-loc-other">Type your location</label>
+          <input id="f-loc-other" name="locationOther" type="text" autocomplete="address-level2" maxlength="60" placeholder="City, state or country" aria-describedby="e-loc-other">
+          <p class="err" id="e-loc-other" hidden></p>
+        </div>
+      </div>
+
       <div class="field">
         <label for="f-email">Email</label>
         <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com" aria-describedby="h-email e-email">

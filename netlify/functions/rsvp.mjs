@@ -23,7 +23,8 @@ const YT_RE = /^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\/\S+$/i;
 const GENRES = new Set(["Hip-hop / Rap", "R&B / Singer", "Dancehall", "Reggae", "Pop", "Bouyon", "Other"]);
 const HEARD = new Set(["Instagram or Facebook ad", "Instagram post or story", "TikTok", "Friend or another artist",
   "WhatsApp or text", "Flyer", "At an event", "Other"]);
-const SCRIPT_VERSION = 2; // bump together with SCRIPT_VERSION in apps-script/Code.gs
+const LOCATIONS = new Set(["Broward", "Miami", "West Palm Beach", "Other"]);
+const SCRIPT_VERSION = 3; // bump together with SCRIPT_VERSION in apps-script/Code.gs
 const MIN_FILL_MS = 4000;
 const BUILT_IN_ORIGINS = ["https://urcypher.com", "https://www.urcypher.com"];
 
@@ -178,6 +179,11 @@ export default async (req) => {
   const heardFrom = clean(body.heardFrom, 40);
   if (!HEARD.has(heardFrom)) return bad("heardFrom", "Tell us how you heard about URCypher.");
   const tracking = clean(body.tracking, 200);
+  const locChoice = clean(body.location, 30);
+  if (!LOCATIONS.has(locChoice)) return bad("location", "Choose your location.");
+  const locOther = clean(body.locationOther, 60);
+  if (locChoice === "Other" && !locOther) return bad("locationOther", "Type your location.");
+  const location = locChoice === "Other" ? `Other: ${locOther}` : locChoice;
 
   // Spam signals are recorded, not used to throw RSVPs away.
   const flags = [];
@@ -189,7 +195,7 @@ export default async (req) => {
     action: "rsvp",
     secret: RSVP_SECRET,
     firstName, lastName, stageName, instagram, genre, phone, email,
-    youtube, profile, website: website || "", heardFrom, tracking,
+    youtube, profile, website: website || "", heardFrom, tracking, location,
     review: flags.join(", "),
     source: (() => { try { return new URL(req.url).host; } catch { return "urcypher.com"; } })()
   };

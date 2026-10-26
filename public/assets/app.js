@@ -30,8 +30,20 @@
     youtube: { el: "f-yt", err: "e-yt" },
     profile: { el: "f-profile", err: "e-profile" },
     website: { el: "f-web", err: "e-web" },
-    heardFrom: { el: "f-heard", err: "e-heard" }
+    heardFrom: { el: "f-heard", err: "e-heard" },
+    location: { el: "f-loc", err: "e-loc" },
+    locationOther: { el: "f-loc-other", err: "e-loc-other" }
   };
+
+  // Location: the text box only shows (and is only required) when "Other" is picked.
+  var locOtherWrap = document.getElementById("loc-other-wrap");
+  function syncLocation(focus) {
+    var other = fields.location.input.value === "Other";
+    locOtherWrap.hidden = !other;
+    fields.locationOther.input.required = other;
+    if (!other) { fields.locationOther.errEl.hidden = true; fields.locationOther.input.removeAttribute("aria-invalid"); }
+    else if (focus) fields.locationOther.input.focus();
+  }
 
   // Ad tracking: read utm_* tags (and Meta's fbclid) from the link the visitor arrived on.
   // Kept for this browser tab so a reload doesn't lose it.
@@ -97,6 +109,8 @@
     var w = val("website");
     if (w && normUrl(w) === null) e.website = "Check this link, or leave it empty.";
     if (!val("heardFrom")) e.heardFrom = "Tell us how you heard about URCypher.";
+    if (!val("location")) e.location = "Choose your location.";
+    else if (val("location") === "Other" && !val("locationOther")) e.locationOther = "Type your location.";
     return { errors: e, ig: ig, yt: yt };
   }
 
@@ -146,6 +160,8 @@
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
   loadDraft();
+  syncLocation(false);
+  fields.location.input.addEventListener("change", function () { syncLocation(true); });
   form.addEventListener("input", saveDraft);
 
   form.addEventListener("input", function (ev) {
@@ -190,6 +206,8 @@
       profile: normUrl(val("profile")),
       website: val("website") ? normUrl(val("website")) : "",
       heardFrom: val("heardFrom"),
+      location: val("location"),
+      locationOther: val("location") === "Other" ? val("locationOther") : "",
       tracking: tracking,
       trap: document.getElementById("f-trap").value,
       elapsedMs: Date.now() - startedAt

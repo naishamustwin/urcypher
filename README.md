@@ -80,6 +80,8 @@ https://urcypher.com/?utm_source=instagram&utm_medium=paid&utm_campaign=urcypher
 
 Meta also adds its own click ID to ad links, which shows up as "meta click". In the Sheet, filter **Ad Tracking** for `medium=paid` or **Heard About** for "Instagram or Facebook ad".
 
+**Location** is a required dropdown (Broward, Miami, West Palm Beach, Other). Picking Other shows a box to type it in; the Sheet saves it as `Other: <what they typed>`.
+
 **After changing Code.gs** (as in this update): paste the new Code.gs, Save, then Deploy > Manage deployments > pencil > Version: **New version** > Deploy. The two new columns appear on their own; existing rows stay put. Until you redeploy, RSVPs still save, just without the new columns, and the setup check at /api/rsvp says the script is out of date.
 
 ## Working the Sheet

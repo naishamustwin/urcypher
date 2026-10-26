@@ -11,11 +11,11 @@
  * URCypherTeam@gmail.com) to get an email for every new RSVP.
  */
 
-var SCRIPT_VERSION = 2;
+var SCRIPT_VERSION = 3;
 var SHEET_NAME = 'RSVPs';
 var HEADERS = ['Submitted', 'Status', 'First Name', 'Last Name', 'Stage Name', 'Instagram',
   'Genre', 'Phone', 'Email', 'YouTube Links', 'Artist Profile', 'Website', 'Repeat', 'Review Note', 'Source',
-  'Heard About', 'Ad Tracking'];
+  'Heard About', 'Ad Tracking', 'Location'];
 var STATUSES = ['New', 'Review', 'Confirmed', 'Waitlist', 'Declined', 'Details sent'];
 var EMAIL_COL = 9;
 
@@ -79,7 +79,8 @@ function doPost(e) {
       safe_(clean_(data.review, 120)),
       safe_(clean_(data.source, 80)),
       safe_(clean_(data.heardFrom, 40)),
-      safe_(clean_(data.tracking, 200))
+      safe_(clean_(data.tracking, 200)),
+      safe_(clean_(data.location, 70))
     ]);
     SpreadsheetApp.flush();
     var row = sheet.getLastRow();
@@ -130,6 +131,7 @@ function notify_(data, row, repeatOf) {
       subject: 'New URCypher RSVP: ' + clean_(data.stageName, 80) + (data.review ? ' (needs review)' : ''),
       body: clean_(data.stageName, 80) + ' (' + clean_(data.genre, 30) + ') just sent an RSVP.\n\n' +
         'Instagram: @' + clean_(data.instagram, 40) + '\n' +
+        'Location: ' + clean_(data.location, 70) + '\n' +
         'Heard about it: ' + clean_(data.heardFrom, 40) + (data.tracking ? ' (' + clean_(data.tracking, 200) + ')' : '') + '\n' +
         'Row ' + row + ' in the RSVPs tab.' + (repeatOf ? '\nRepeat: ' + repeatOf : '') +
         (data.review ? '\nReview note: ' + clean_(data.review, 120) : '') + '\n\n' +
