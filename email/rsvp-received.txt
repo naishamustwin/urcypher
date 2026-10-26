@@ -1,11 +1,11 @@
-Subject: We got your RSVP, {{first_name}}
+Subject: We got your RSVP, {{stage_name}}
 Preheader: Your music is in the queue. A URCypher team member will be listening.
 
 URCYPHER / INVITE ONLY
 
 You're in the queue.
 
-Hi {{first_name}},
+Hi {{stage_name}},
 
 We got your RSVP for URCypher, South Florida's biggest cypher. Thanks for putting your name in.
 
