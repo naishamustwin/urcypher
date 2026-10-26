@@ -9,6 +9,9 @@
  *   APPS_SCRIPT_URL   the Apps Script web app URL (ends in /exec)
  *   RSVP_SECRET       a long random string, identical to the one in Apps Script
  *   ALLOWED_ORIGIN    optional extra sites, comma separated (the site's own address is always allowed)
+ *   MAILCHIMP_API_KEY     optional: adds each RSVP to Mailchimp (key ends in -us21 or similar)
+ *   MAILCHIMP_AUDIENCE_ID optional: the Mailchimp audience to add them to
+ *   MAILCHIMP_TAG         optional: tag to apply (default "URCypher RSVP")
  *
  * Lessons from URVoteMatters, built in:
  *   - Suspected spam is SAVED with Status "Review", never silently thrown away.
@@ -17,6 +20,8 @@
  *   - Every failure is logged with a plain-English reason (Netlify > Logs > Functions > rsvp).
  */
 
+import { createHash } from "node:crypto";
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const IG_RE = /^[A-Za-z0-9._]{1,30}$/;
 const YT_RE = /^https?:\/\/(www\.|m\.|music\.)?(youtube\.com|youtu\.be)\/\S+$/i;
@@ -24,7 +29,7 @@ const GENRES = new Set(["Hip-hop / Rap", "R&B / Singer", "Dancehall", "Reggae", 
 const HEARD = new Set(["Instagram or Facebook ad", "Instagram post or story", "TikTok", "Friend or another artist",
   "WhatsApp or text", "Flyer", "At an event", "Other"]);
 const LOCATIONS = new Set(["Broward", "Miami", "West Palm Beach", "Other"]);
-const SCRIPT_VERSION = 3; // bump together with SCRIPT_VERSION in apps-script/Code.gs
+const SCRIPT_VERSION = 4; // bump together with SCRIPT_VERSION in apps-script/Code.gs
 const MIN_FILL_MS = 4000;
 const BUILT_IN_ORIGINS = ["https://urcypher.com", "https://www.urcypher.com"];
 
@@ -93,7 +98,8 @@ async function setupCheck() {
     scriptReachable: false,
     secretMatches: false,
     sheetReady: false,
-    scriptUpToDate: false
+    scriptUpToDate: false,
+    mailchimp: mailchimpConfigured() ? false : "not connected (optional)"
   };
   let fix = null;
   if (!checks.settings) fix = "Add APPS_SCRIPT_URL and RSVP_SECRET in Netlify, then trigger a new deploy.";
@@ -120,6 +126,19 @@ async function setupCheck() {
   }
   if (checks.settings && !checks.scriptUrlLooksRight && !fix)
     fix = "APPS_SCRIPT_URL should start with https://script.google.com/macros/s/ and end in /exec (not /dev).";
+  if (mailchimpConfigured()) {
+    try {
+      const mc = await mailchimpRequest("GET", `/lists/${process.env.MAILCHIMP_AUDIENCE_ID}?fields=name`);
+      if (mc.ok) checks.mailchimp = true;
+      else if (!fix) fix = mc.status === 401
+        ? "Mailchimp rejected the API key. Re-copy MAILCHIMP_API_KEY (it ends in something like -us21), then redeploy."
+        : mc.status === 404
+          ? "Mailchimp can't find that audience. Re-copy MAILCHIMP_AUDIENCE_ID from Audience > Settings > Audience name and defaults, then redeploy."
+          : "Mailchimp answered with an error (" + mc.status + "). Check both Mailchimp settings.";
+    } catch (err) {
+      if (!fix) fix = "Could not reach Mailchimp: " + (err && err.message);
+    }
+  }
   const allGood = Object.values(checks).every(Boolean);
   return json(allGood ? 200 : 503, { ok: allGood, checks, fix: allGood ? "Everything is connected. Submit a test RSVP." : fix });
 }
@@ -211,13 +230,64 @@ export default async (req) => {
       console.error("Apps Script refused the RSVP:", r.data.error || "no row number returned");
       return json(502, { ok: false, error: "upstream" });
     }
-    console.log(`RSVP saved to row ${r.data.row}${r.data.status === "repeat" ? " (repeat email)" : ""}: ${stageName}`);
+    console.log(`RSVP saved to row ${r.data.row}${r.data.status === "repeat" ? " (repeat email)" : ""}: ${stageName}` +
+      (r.data.email ? ` | artist email: ${r.data.email}` : ""));
+    // Mailchimp is a copy for future campaigns. It never blocks or undoes a saved RSVP.
+    if (mailchimpConfigured() && !flags.length) {
+      try {
+        const res = await addToMailchimp({ email, firstName, lastName, stageName, genre, location });
+        console.log("Mailchimp:", res);
+      } catch (err) {
+        console.error("Mailchimp sync failed (RSVP is still saved in the Sheet):", err && err.message);
+      }
+    }
     return json(200, { ok: true, saved: true, status: r.data.status === "repeat" ? "repeat" : "new" });
   } catch (err) {
     console.error("Could not reach Apps Script:", err && err.message);
     return json(502, { ok: false, error: "upstream" });
   }
 };
+
+// ---------- Mailchimp ----------
+function mailchimpConfigured() {
+  return !!(process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_AUDIENCE_ID);
+}
+
+async function mailchimpRequest(method, path, body) {
+  const key = process.env.MAILCHIMP_API_KEY.trim();
+  const dc = key.split("-")[1];
+  if (!dc) throw new Error("MAILCHIMP_API_KEY should end in a data center like -us21");
+  const base = process.env.MAILCHIMP_API_BASE || `https://${dc}.api.mailchimp.com/3.0`;
+  const res = await fetch(base + path, {
+    method,
+    headers: {
+      Authorization: "Basic " + Buffer.from("urcypher:" + key).toString("base64"),
+      "Content-Type": "application/json"
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    signal: AbortSignal.timeout(6000)
+  });
+  const data = await res.json().catch(() => null);
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function addToMailchimp({ email, firstName, lastName, stageName, genre, location }) {
+  const list = process.env.MAILCHIMP_AUDIENCE_ID.trim();
+  const hash = createHash("md5").update(email.toLowerCase()).digest("hex");
+  const path = `/lists/${list}/members/${hash}?skip_merge_validation=true`;
+  const full = { FNAME: firstName, LNAME: lastName, STAGENAME: stageName, GENRE: genre, LOCATION: location };
+  let r = await mailchimpRequest("PUT", path, { email_address: email, status_if_new: "subscribed", merge_fields: full });
+  if (!r.ok && r.status === 400) {
+    // Usually a merge field that doesn't exist in the audience yet: retry with the built-in name fields only.
+    console.warn("Mailchimp refused some fields, retrying with first and last name only:", r.data && r.data.detail);
+    r = await mailchimpRequest("PUT", path, { email_address: email, status_if_new: "subscribed", merge_fields: { FNAME: firstName, LNAME: lastName } });
+  }
+  if (!r.ok) throw new Error(`member ${r.status} ${(r.data && (r.data.detail || r.data.title)) || ""}`.trim());
+  const tag = (process.env.MAILCHIMP_TAG || "URCypher RSVP").trim();
+  const t = await mailchimpRequest("POST", `/lists/${list}/members/${hash}/tags`, { tags: [{ name: tag, status: "active" }] });
+  if (!t.ok) throw new Error(`tag ${t.status} ${(t.data && t.data.detail) || ""}`.trim());
+  return `added ${email} (${r.data && r.data.status}), tagged "${tag}"`;
+}
 
 export const config = {
   path: "/api/rsvp",

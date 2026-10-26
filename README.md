@@ -84,6 +84,28 @@ Meta also adds its own click ID to ad links, which shows up as "meta click". In 
 
 **After changing Code.gs** (as in this update): paste the new Code.gs, Save, then Deploy > Manage deployments > pencil > Version: **New version** > Deploy. The two new columns appear on their own; existing rows stay put. Until you redeploy, RSVPs still save, just without the new columns, and the setup check at /api/rsvp says the script is out of date.
 
+## Instant "We got your RSVP" email (Gmail)
+
+Code.gs sends the branded email in `email/rsvp-received.html` to every artist the moment their row is saved.
+
+- It comes **from the Google account that owns the Sheet**, shown as "URCypher". Replies go to URCypherTeam@gmail.com. For the From address to be URCypherTeam@gmail.com too, the Sheet and script must live in that account.
+- The **Confirmation Email** column shows `Sent <time>`, `Failed: <reason>`, or `Not sent (in review…)`. RSVPs flagged by the spam checks are not emailed; if one is a real artist, forward them the email by hand.
+- Gmail allows about 100 automated emails a day on a free account. If that's ever hit, the column says so and the RSVP is still saved.
+- To pause it: add the script property `ARTIST_EMAIL` = `off`.
+- To change the email: edit `email/rsvp-received.html` and `.txt`, run `python3 scripts/embed-email.py`, then paste the new Code.gs and deploy a New version.
+
+## Mailchimp (stores contacts for campaigns)
+
+After a real RSVP is saved, the Netlify function adds the artist to your Mailchimp audience (status: subscribed) and tags them **URCypher RSVP**. Mailchimp never blocks an RSVP; failures are only logged.
+
+1. **Audience fields** (Audience > Settings > Audience fields and merge tags): add three Text fields with these exact merge tags: `STAGENAME`, `GENRE`, `LOCATION`. First and last name (FNAME, LNAME) already exist. If a field is missing, the contact is still added with just their name.
+2. **API key:** Profile icon > Profile > Extras > API keys > Create A Key. Copy it (it ends in something like `-us21`).
+3. **Audience ID:** Audience > Settings > Audience name and defaults > Audience ID.
+4. **Netlify:** add environment variables `MAILCHIMP_API_KEY` and `MAILCHIMP_AUDIENCE_ID` (tick "Contains secret values" for the key), then Deploys > Trigger deploy.
+5. Open `/api/rsvp`: the `mailchimp` check should say `true`.
+
+The form tells artists: "We may also send URCypher updates; unsubscribe anytime." Mailchimp adds the unsubscribe link to every campaign.
+
 ## Working the Sheet
 
 - **Status** is a dropdown: New, Review, Confirmed, Waitlist, Declined, Details sent. Change it as the team works through RSVPs.
@@ -102,3 +124,4 @@ Look in **Netlify > Logs > Functions > rsvp**. Every failure is logged in plain 
 | `Apps Script refused the RSVP: unauthorized` | The two `RSVP_SECRET` values don't match |
 | `Blocked: request came from a site that is not allowed` | Add that address to `ALLOWED_ORIGIN` |
 | `RSVP saved for review (possible spam)` | Not an error. The row is in the Sheet with Status Review |
+| `Mailchimp sync failed` | The RSVP is saved. Open /api/rsvp to see what's wrong with the Mailchimp settings |
