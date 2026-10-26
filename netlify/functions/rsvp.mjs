@@ -116,8 +116,10 @@ async function setupCheck() {
           checks.secretMatches = true;
           checks.sheetReady = !!r.data.sheetReady;
           checks.scriptUpToDate = Number(r.data.version || 1) >= SCRIPT_VERSION;
+          checks.scriptVersionFound = Number(r.data.version || 1);
+          checks.scriptVersionNeeded = SCRIPT_VERSION;
           if (!checks.sheetReady) fix = "Run the setup function once in Apps Script to create the RSVPs tab.";
-          else if (!checks.scriptUpToDate) fix = "Apps Script is running an older version. Paste the latest Code.gs, Save, then Deploy > Manage deployments > pencil > Version: New version > Deploy. RSVPs still save meanwhile, just without the newest columns.";
+          else if (!checks.scriptUpToDate) fix = "The script this site is connected to is version " + checks.scriptVersionFound + ", not " + SCRIPT_VERSION + ". Either APPS_SCRIPT_URL in Netlify points to a different (older) script or deployment, or the new code was pasted without deploying a New version. Paste the latest Code.gs, Save, then Deploy > Manage deployments > pencil > Version: New version > Deploy. RSVPs still save meanwhile, just without the newest columns.";
         } else fix = "Apps Script answered with: " + r.data.error;
       }
     } catch (err) {
