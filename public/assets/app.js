@@ -8,6 +8,19 @@
   var form = document.getElementById("rsvp-form");
   if (!form) return;
 
+  // RSVP deadline: after it passes, the form is swapped for a "closed" message.
+  // To extend it, change data-deadline on the form AND RSVP_DEADLINE in Netlify (or the default in rsvp.mjs).
+  var deadline = Date.parse(form.getAttribute("data-deadline") || "");
+  if (deadline && Date.now() > deadline) {
+    form.hidden = true;
+    var closed = document.getElementById("closed");
+    if (closed) closed.hidden = false;
+    var hd = document.getElementById("hero-deadline");
+    if (hd) hd.innerHTML = '<span class="deadline__label">RSVPs closed</span> <span class="deadline__date">Nov 22, 2026</span>';
+    document.querySelectorAll('a.cta[href="#rsvp"] .cta__label').forEach(function (el) { el.textContent = "RSVPs closed"; });
+    return;
+  }
+
   var TEAM_EMAIL = "URCypherTeam@gmail.com";
   var DRAFT_KEY = "urcypher-rsvp-draft";
   var startedAt = Date.now();
@@ -244,6 +257,10 @@
         var f = showErrors(e);
         showSummary("One field needs a fix before you can send.");
         if (f) f.focus();
+        return;
+      }
+      if (res.status === 410) {
+        showSummary("RSVPs closed on Nov 22, 2026, so this one couldn't be saved.", "If you think that's a mistake, email your submission to " + TEAM_EMAIL + ".");
         return;
       }
       if (res.status === 429) {

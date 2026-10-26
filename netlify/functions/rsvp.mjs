@@ -9,6 +9,7 @@
  *   APPS_SCRIPT_URL   the Apps Script web app URL (ends in /exec)
  *   RSVP_SECRET       a long random string, identical to the one in Apps Script
  *   ALLOWED_ORIGIN    optional extra sites, comma separated (the site's own address is always allowed)
+ *   RSVP_DEADLINE     optional: ISO time RSVPs close (default 2026-11-23T04:59:59Z = Nov 22, 11:59 PM ET)
  *   MAILCHIMP_API_KEY     optional: adds each RSVP to Mailchimp (key ends in -us21 or similar)
  *   MAILCHIMP_AUDIENCE_ID optional: the Mailchimp audience to add them to
  *   MAILCHIMP_TAG         optional: tag to apply (default "URCypher RSVP")
@@ -31,6 +32,8 @@ const HEARD = new Set(["Instagram or Facebook ad", "Instagram post or story", "T
 const LOCATIONS = new Set(["Broward", "Miami", "West Palm Beach", "Other"]);
 const SCRIPT_VERSION = 5; // bump together with SCRIPT_VERSION in apps-script/Code.gs
 const MIN_FILL_MS = 4000;
+const DEFAULT_DEADLINE = "2026-11-23T04:59:59Z"; // Nov 22, 2026, 11:59 PM Eastern
+const DEADLINE_GRACE_MS = 15 * 60 * 1000;        // let someone mid-form at midnight finish
 const BUILT_IN_ORIGINS = ["https://urcypher.com", "https://www.urcypher.com"];
 
 const json = (status, body) =>
@@ -153,6 +156,12 @@ export default async (req) => {
     console.error("Blocked: request came from a site that is not allowed:", req.headers.get("origin"),
       "— add it to ALLOWED_ORIGIN if it is yours.");
     return json(403, { ok: false, error: "forbidden" });
+  }
+
+  const deadline = Date.parse(process.env.RSVP_DEADLINE || DEFAULT_DEADLINE);
+  if (deadline && Date.now() > deadline + DEADLINE_GRACE_MS) {
+    console.warn("RSVP refused: the deadline has passed.");
+    return json(410, { ok: false, error: "closed" });
   }
 
   const { APPS_SCRIPT_URL, RSVP_SECRET } = process.env;

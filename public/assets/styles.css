@@ -90,6 +90,11 @@ a { color: var(--blue); }
 .hero__row { display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-end; }
 .hero__lede { margin: 0; flex: 1 1 420px; min-width: 0; max-width: 38rem; font-weight: 500; font-size: clamp(1.25rem, 2.2vw, 1.6rem); line-height: 1.4; }
 
+.deadline { margin: 0; align-self: flex-start; display: inline-flex; flex-wrap: wrap; align-items: stretch; font-family: var(--f-mono); font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.deadline__label { background: var(--ink); color: var(--paper); padding: 10px 14px; }
+.deadline__date { background: var(--paper); color: var(--ink); padding: 10px 14px; font-weight: 500; }
+.closed { background: var(--ink); color: var(--paper); padding: clamp(28px, 5vw, 56px); display: flex; flex-direction: column; gap: 20px; }
+.closed a { color: var(--paper); text-underline-offset: 3px; }
 .meter { display: flex; flex-direction: column; gap: 10px; }
 .meter__bars { height: 88px; display: flex; align-items: flex-end; gap: clamp(4px, 0.8vw, 10px); }
 .meter__bars i { flex: 1 1 0; background: var(--paper); height: 50%; }

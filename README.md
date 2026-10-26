@@ -106,6 +106,18 @@ After a real RSVP is saved, the Netlify function adds the artist to your Mailchi
 
 The form tells artists: "We may also send URCypher updates; unsubscribe anytime." Mailchimp adds the unsubscribe link to every campaign.
 
+## RSVP deadline: Nov 22, 2026, 11:59 PM ET
+
+The site shows the deadline in the hero, step 1 and the form header. After it passes, the form is replaced by a "The circle is full" message and the Netlify function refuses new RSVPs (with a 15-minute grace period for anyone mid-form).
+
+**To extend it**, change both:
+1. `data-deadline` on the form in `public/index.html` (UTC time, e.g. `2026-11-30T04:59:59Z` for Nov 29, 11:59 PM ET), plus the dates written in the page copy.
+2. The `RSVP_DEADLINE` environment variable in Netlify (same value), then trigger a deploy.
+
+## Database invite email
+
+`email/invite-database.html` is a Mailchimp campaign (one message for media, DJs, artists and promoters). It uses `*|FNAME|*` with a "Hey," fallback, Mailchimp's forward link, and links tagged `utm_campaign=urcypher_invite`, so RSVPs from it show in the Ad Tracking column. Pasting custom HTML needs Mailchimp Standard or higher; on other plans, rebuild it in the drag-and-drop editor using the copy in `invite-database.txt`.
+
 ## Working the Sheet
 
 - **Status** is a dropdown: New, Review, Confirmed, Waitlist, Declined, Details sent. Change it as the team works through RSVPs.

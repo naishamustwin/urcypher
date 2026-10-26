@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="URCypher">
 <meta property="og:title" content="URCypher | South Florida's Biggest Cypher">
-<meta property="og:description" content="Invite only. Apply for a spot in the circle. Date and location go to confirmed artists only.">
+<meta property="og:description" content="Invite only. RSVPs close Nov 22, 2026. Date and location go to confirmed artists only.">
 <meta property="og:url" content="https://urcypher.com/">
 <meta property="og:image" content="https://urcypher.com/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -37,6 +37,7 @@
   <div class="wrap hero__body">
     <p class="mono">Invite only / South Florida</p>
     <h1 class="hero__title">South<br>Florida's<br>biggest<br>cypher<span class="dot dot--ink" aria-hidden="true"></span></h1>
+    <p class="deadline" id="hero-deadline"><span class="deadline__label">RSVPs close</span> <span class="deadline__date">Sun, Nov 22, 2026</span></p>
     <div class="hero__row">
       <p class="hero__lede">Rappers, singers, dancehall, reggae, pop and bouyon artists. Apply for a spot in the circle. The date and location go out privately, only to artists our team has confirmed.</p>
       <a class="cta" href="#rsvp"><span class="cta__label">Request your spot</span><span class="cta__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M12 3v17M5 13l7 7 7-7"/></svg></span></a>
@@ -58,7 +59,7 @@
       <li>
         <span class="mono steps__num">Step 1</span>
         <span class="steps__title">Submit the form</span>
-        <span class="steps__text">Tell us who you are and send links to your music so we can hear you.</span>
+        <span class="steps__text">Tell us who you are and send links to your music so we can hear you. RSVPs close Nov 22, 2026.</span>
       </li>
       <li>
         <span class="mono steps__num">Step 2</span>
@@ -76,10 +77,16 @@
   <section id="rsvp" class="wrap rsvp" aria-labelledby="rsvp-h">
     <div class="rsvp__head">
       <h2 id="rsvp-h" class="h2">Artist RSVP</h2>
-      <p class="mono">All fields required unless marked optional</p>
+      <p class="mono">Deadline: Nov 22, 2026 / 11:59 PM ET<br>All fields required unless marked optional</p>
     </div>
 
-    <form id="rsvp-form" class="form" novalidate>
+    <div class="closed" id="closed" hidden>
+      <p class="mono">RSVPs closed</p>
+      <p class="done__title">The circle is full.</p>
+      <p class="done__text">RSVPs for this URCypher closed on Nov 22, 2026. If you already sent yours, the team is listening and will reach out by email. Follow <a href="https://www.instagram.com/urcypher.tv/" target="_blank" rel="noopener">@urcypher.tv</a> for what's next.</p>
+    </div>
+
+    <form id="rsvp-form" class="form" novalidate data-deadline="2026-11-23T04:59:59Z">
       <div class="form__summary" id="form-summary" role="alert" hidden></div>
 
       <div class="row">
