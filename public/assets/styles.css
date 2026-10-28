@@ -177,3 +177,11 @@ select { appearance: none; -webkit-appearance: none; background-image: linear-gr
   .cta__arrow { width: 56px; flex-basis: 56px; }
 }
 @media (max-width: 22.5em) { .cta__label { padding: 16px 14px; font-size: 1rem; } .cta__arrow { width: 50px; flex-basis: 50px; } }
+
+/* Privacy page */
+.privacy { padding-top: 48px; padding-bottom: 72px; }
+.privacy > * { max-width: 46rem; }
+.privacy h2 { font-family: var(--f-mono); font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 36px 0 10px; }
+.privacy p { line-height: 1.6; margin: 0; }
+.privacy a { color: inherit; text-underline-offset: 3px; }
+.privacy__back { margin-top: 48px !important; }

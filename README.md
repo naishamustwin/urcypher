@@ -137,3 +137,15 @@ Look in **Netlify > Logs > Functions > rsvp**. Every failure is logged in plain 
 | `Blocked: request came from a site that is not allowed` | Add that address to `ALLOWED_ORIGIN` |
 | `RSVP saved for review (possible spam)` | Not an error. The row is in the Sheet with Status Review |
 | `Mailchimp sync failed` | The RSVP is saved. Open /api/rsvp to see what's wrong with the Mailchimp settings |
+
+## Meta Pixel
+
+`public/assets/pixel.js` sends **PageView** when urcypher.com opens and **Lead** only after the Sheet confirms a new RSVP (repeat RSVPs aren't counted). It never sends names, emails, phone numbers or form answers.
+
+It stays off until the pixel (dataset) ID is filled in at the top of `public/index.html`:
+
+```
+<meta name="meta-pixel-id" content="">
+```
+
+`netlify.toml` already allows Meta's script, and `/privacy.html` (linked in the footer) explains the pixel to visitors. Check it with the Meta Pixel Helper browser extension or Events Manager > Test events.
