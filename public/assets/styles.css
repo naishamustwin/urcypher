@@ -162,6 +162,7 @@ select { appearance: none; -webkit-appearance: none; background-image: linear-gr
 
 .foot { background: var(--ink); color: var(--paper); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .foot__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; padding-top: 40px; padding-bottom: 40px; }
+.foot__note { margin: 0; width: 100%; font-size: 0.8rem; color: #BDBBB3; }
 .foot__meta { text-align: right; line-height: 1.6; font-size: 0.85rem; }
 .nojs { margin: 0; padding: 16px; background: var(--ink); color: var(--paper); text-align: center; }
 

@@ -242,6 +242,8 @@
       var d = res.data || {};
       if (res.status === 200 && d.ok && d.saved === true) {
         clearDraft();
+        // Tell Meta an RSVP was completed (no answers are sent). Ads optimize toward this.
+        try { if (window.fbq) window.fbq("track", "Lead", { content_name: "URCypher RSVP" }); } catch (e) {}
         if (d.status === "repeat") {
           document.getElementById("done-text").textContent =
             "We already had an RSVP from this email, so we saved this one as an update. A team member will reach out to confirm, then send the date and location to your email.";

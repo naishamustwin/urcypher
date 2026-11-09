@@ -118,6 +118,10 @@ The site shows the deadline in the hero, step 1 and the form header. After it pa
 
 `email/invite-database.html` is a Mailchimp campaign (one message for media, DJs, artists and promoters). It uses `*|FNAME|*` with a "Hey," fallback, Mailchimp's forward link, and links tagged `utm_campaign=urcypher_invite`, so RSVPs from it show in the Ad Tracking column. Pasting custom HTML needs Mailchimp Standard or higher; on other plans, rebuild it in the drag-and-drop editor using the copy in `invite-database.txt`.
 
+## Meta Pixel (dataset "URCypher Website", ID 1030469333406553)
+
+`public/assets/pixel.js` loads the Pixel and sends **PageView** on every visit. `app.js` sends **Lead** once, only after the Sheet confirms an RSVP was saved; no form answers go to Meta. The security policy in `netlify.toml` allows connect.facebook.net and www.facebook.com for this. If an ad blocker blocks Meta, RSVPs still work. Ads should optimize for the **Lead** event on this dataset.
+
 ## Working the Sheet
 
 - **Status** is a dropdown: New, Review, Confirmed, Waitlist, Declined, Details sent. Change it as the team works through RSVPs.
